@@ -148,6 +148,8 @@ export const en = {
       automaton: "KMP Automaton (DFA)",
       currentState: "Current state:",
       match: "match!",
+      finishedWithMatches: "Finished — pattern matched",
+      finishedNoMatches: "Finished — no match",
       activatesDuringSearch: "Automaton activates during search phase",
       transitionTable: "Transition table δ(state, char)",
       state: "State",

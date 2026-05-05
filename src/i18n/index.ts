@@ -9,12 +9,12 @@ export const resources = {
 } as const
 
 const storedLanguage = localStorage.getItem('language')
-const browserLanguage = navigator.language.toLowerCase().startsWith('hy') ? 'hy' : 'en'
+const defaultLanguage = 'hy'
 
 void i18n.use(initReactI18next).init({
   resources,
-  lng: storedLanguage === 'hy' || storedLanguage === 'en' ? storedLanguage : browserLanguage,
-  fallbackLng: 'en',
+  lng: storedLanguage === 'hy' || storedLanguage === 'en' ? storedLanguage : defaultLanguage,
+  fallbackLng: defaultLanguage,
   interpolation: {
     escapeValue: false,
   },

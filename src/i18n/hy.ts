@@ -148,6 +148,8 @@ export const hy = {
       automaton: "KMP ավտոմատ (DFA)",
       currentState: "Ընթացիկ վիճակ.",
       match: "համընկնում",
+      finishedWithMatches: "Ավարտված է — նմուշը գտնված է",
+      finishedNoMatches: "Ավարտված է — համընկնում չկա",
       activatesDuringSearch: "Ավտոմատը ակտիվանում է որոնման փուլում",
       transitionTable: "Անցումների աղյուսակ δ(վիճակ, նիշ)",
       state: "Վիճակ",

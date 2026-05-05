@@ -533,10 +533,16 @@ export function KMPAutomatonGraph() {
   const m = pattern.length;
   const isSearchPhase =
     kmp && (kmp.phase === "search" || kmp.phase === "complete");
+  const isComplete = kmp?.phase === "complete";
+  const hasAnyMatches = (kmp?.matchStarts?.length ?? 0) > 0;
 
   let activeState = -1;
   let isAcceptActive = false;
-  if (isSearchPhase && step) {
+  if (isSearchPhase && !isComplete && step) {
+    // The algorithm is still running. Reflect the current state of the search.
+    // Once it finishes we deliberately clear the highlight: showing q_m as
+    // "active" on the final step is misleading (it suggests the automaton just
+    // transitioned there, even when the match happened many steps earlier).
     if (step.action === "kmp:match") {
       activeState = m;
       isAcceptActive = true;
@@ -546,7 +552,14 @@ export function KMPAutomatonGraph() {
   }
 
   let selfLoopActiveState = -1;
-  if (isSearchPhase && step && dfa && activeState >= 0 && activeState <= m) {
+  if (
+    isSearchPhase &&
+    !isComplete &&
+    step &&
+    dfa &&
+    activeState >= 0 &&
+    activeState <= m
+  ) {
     if (step.action === "kmp:advance-i") {
       selfLoopActiveState = 0;
     } else if (step.action === "kmp:compare" && step.textIndex < text.length) {
@@ -565,6 +578,7 @@ export function KMPAutomatonGraph() {
   } | null = null;
   if (
     isSearchPhase &&
+    !isComplete &&
     step &&
     dfa &&
     kmp?.lps &&
@@ -753,7 +767,19 @@ export function KMPAutomatonGraph() {
           {t("panels.kmp.automaton")}
         </h3>
         <span className="text-xs font-medium text-slate-500 dark:text-slate-400">
-          {isSearchPhase ? (
+          {isComplete ? (
+            <span
+              className={`font-medium ${
+                hasAnyMatches
+                  ? "text-algo-match"
+                  : "text-slate-500 dark:text-slate-400"
+              }`}
+            >
+              {hasAnyMatches
+                ? t("panels.kmp.finishedWithMatches")
+                : t("panels.kmp.finishedNoMatches")}
+            </span>
+          ) : isSearchPhase && activeState >= 0 ? (
             <>
               {t("panels.kmp.currentState")}{" "}
               <span
